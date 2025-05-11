@@ -23,7 +23,7 @@ This repository contains Python scripts for post-processing simulation data rela
     - Outputs two arrays:
         - Tip deflection of the cilia.
         - Mask indicating values above or below the steady-state deflection.
-    - For each cilia tip deflection component (typically two), generates four lists in total.
+    - Generates four lists in total corresponding to the two components of cilia tip deflection. 
     - Saves the processed data as a pickle file named `simdata_tip.pkl`.
 
 ---
@@ -38,10 +38,10 @@ This repository contains Python scripts for post-processing simulation data rela
         - Takes the absolute value to convert valleys to peaks, simplifying area calculations.
     - Currently calculates the following features:
 
-1. Maximum absolute deflection from steady state.
-2. Area under the signal.
-3. Signal width.
-4. Number of peaks in the signal.
+        1. Maximum absolute deflection from steady state.
+        2. Area under the signal.
+        3. Signal width.
+        4. Number of peaks in the signal.
     - Stores results as a list of lists (indexed by cilium and feature), where each element is a NumPy array: `ciliafeatures[icilia][ifeature]`.
 ---
 
