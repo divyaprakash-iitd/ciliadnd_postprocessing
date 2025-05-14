@@ -45,6 +45,20 @@ This repository contains Python scripts for post-processing simulation data rela
     - Stores results as a list of lists (indexed by cilium and feature), where each element is a NumPy array: `ciliafeatures[icilia][ifeature]`.
 ---
 
+## 4. `analyze_h5_databases.py`
+
+- **Purpose:** Analyzes the final configuration of cilia and particles in each simulation to evaluate gate behavior and particle sorting performance.
+- **Functionality:**
+    - Uses Principal Component Analysis (PCA) to determine whether the last two cilia are in a **"closed" (vertical)** or **"open" (deflected)** state.
+    - Classifies the gate configuration as:
+        - `'sort_top'` if only the top cilium is vertical,
+        - `'sort_bottom'` if only the bottom cilium is vertical,
+        - `'undefined'` otherwise.
+    - Computes the **percentage of particle nodes** located in the designated half (top or bottom) of the channel based on the gate state.
+    - Calculates the **total number of full rotations** made by particles using `thetacum`.
+    - Saves all results in a CSV file named `analysis_results.csv`.
+---
+
 ## Notes
 
 - Feature definitions in `generate_cilia_features.py` are subject to ongoing development.
