@@ -6,6 +6,34 @@ import os
 from tqdm import tqdm  # Import tqdm for progress bar
 plt.rcParams.update({'font.size': 18})  # Set global font size to 14
 
+def find_threshold_crossing(data_array, threshold):
+    """
+    Find the first time index where all px values exceed the given threshold.
+    
+    Parameters:
+    -----------
+    data_array : numpy.ndarray
+        Array with shape (time_steps, 1, 101) containing px values
+    threshold : float
+        The threshold value that all px values must exceed
+    
+    Returns:
+    --------
+    int or None
+        The first time index where all values exceed the threshold, or None if never happens
+    """
+    # Iterate through each time step
+    for time_idx in range(data_array.shape[0]):
+        # Get all px values at this time step
+        px_values = data_array[time_idx, 0, :]
+        
+        # Check if all values exceed the threshold
+        if (px_values > threshold).all():
+            return time_idx
+    
+    # If we never found a time where all values exceed the threshold
+    return None
+
 def find_extreme_window(signal, mean_y, peak_detection_params=None):
     """
     Automatically find the most extreme feature (peak or valley) in a signal

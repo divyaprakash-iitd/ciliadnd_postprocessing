@@ -3,7 +3,11 @@ import pandas as pd
 import h5py
 import numpy as np
 import pickle
-from generate_signatures import find_extreme_window
+from generate_signatures import find_extreme_window, find_threshold_crossing
+
+# Constants
+Lx = 0.01
+
 
 def process_h5_files(csv_path):
     """
@@ -35,6 +39,10 @@ def process_h5_files(csv_path):
         try:
             # Open and process the H5 file
             with h5py.File(file_path, 'r') as f:
+                # Find the time index when the particle crosses xlim_val = 0.7*Lx
+                xlim_val = 0.7*Lx
+                time_index = find_threshold_crossing(f['particles/px'],xlim_val)
+                
                 # Here you can process each H5 file as needed
                 # For example, you might want to:
                
@@ -50,8 +58,15 @@ def process_h5_files(csv_path):
                     
                     # Select the base value for every cilia and component
                     datum = base_values[icilia,:].squeeze()
-                    mask_x = find_extreme_window(signal_x, datum[0], peak_detection_params=None)
-                    mask_y = find_extreme_window(signal_y, datum[1], peak_detection_params=None)
+                    
+                    # Prepare signa with nan to exclude time-series data after particle crossing the threshold 
+                    signal_x_input = signal_x.copy()
+                    signal_y_input = signal_y.copy()
+                    signal_x_input[time_index:] = np.nan
+                    signal_y_input[time_index:] = np.nan
+
+                    mask_x = find_extreme_window(signal_x_input, datum[0], peak_detection_params=None)
+                    mask_y = find_extreme_window(signal_y_input, datum[1], peak_detection_params=None)
                     
                     ctip[:,icilia,0] = signal_x 
                     ctip[:,icilia,1] = signal_y  
