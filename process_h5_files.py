@@ -40,8 +40,10 @@ def process_h5_files(csv_path):
             # Open and process the H5 file
             with h5py.File(file_path, 'r') as f:
                 # Find the time index when the particle crosses xlim_val = 0.7*Lx
-                xlim_val = 0.7*Lx
-                time_index = find_threshold_crossing(f['particles/px'],xlim_val)
+                xlim_val_1 = 0.1*Lx
+                time_index_1 = find_threshold_crossing(f['particles/px'],xlim_val_1)
+                xlim_val_2 = 0.7*Lx
+                time_index_2 = find_threshold_crossing(f['particles/px'],xlim_val_2)
                 
                 # Here you can process each H5 file as needed
                 # For example, you might want to:
@@ -59,11 +61,13 @@ def process_h5_files(csv_path):
                     # Select the base value for every cilia and component
                     datum = base_values[icilia,:].squeeze()
                     
-                    # Prepare signa with nan to exclude time-series data after particle crossing the threshold 
+                    # Prepare signal with nan to exclude time-series data after particle crossing the threshold 
                     signal_x_input = signal_x.copy()
                     signal_y_input = signal_y.copy()
-                    signal_x_input[time_index:] = np.nan
-                    signal_y_input[time_index:] = np.nan
+                    signal_x_input[0:time_index_1] = np.nan
+                    signal_x_input[time_index_2:] = np.nan
+                    signal_y_input[0:time_index_1:] = np.nan
+                    signal_y_input[time_index_2:] = np.nan
 
                     mask_x = find_extreme_window(signal_x_input, datum[0], peak_detection_params=None)
                     mask_y = find_extreme_window(signal_y_input, datum[1], peak_detection_params=None)
