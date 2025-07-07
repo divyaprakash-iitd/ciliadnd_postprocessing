@@ -93,5 +93,5 @@ def process_h5_files(csv_path):
 
 if __name__ == "__main__":
     # Path to the CSV file
-    csv_path = "h5_values.csv"
+    csv_path = "h5_database_list.csv"
     simdata_tip = process_h5_files(csv_path)
